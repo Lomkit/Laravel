@@ -1,0 +1,46 @@
+{
+    "name": "lomkit/laravel",
+    "description": "Lomkit utils for laravel",
+    "keywords": ["laravel", "lomkit"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gautier Deleglise",
+            "email": "gautier@lomkit.com"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0",
+        "ext-json": "*",
+        "laravel/framework": "^8.29",
+        "symfony/var-dumper": "^5.0",
+        "laravel/nova": "~3.0"
+    },
+    "require-dev": {
+        "ext-gd": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lomkit\\Laravel\\": "src/",
+            "Lomkit\\Laravel\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+              "Lomkit\\Laravel\\LomkitServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
