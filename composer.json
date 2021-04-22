@@ -12,17 +12,17 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
+        "google/cloud-translate": "^1.10",
         "laravel/framework": "^8.29",
-        "symfony/var-dumper": "^5.0",
-        "laravel/nova": "~3.0"
+        "laravel/nova": "~3.0",
+        "symfony/var-dumper": "^5.0"
     },
     "require-dev": {
         "ext-gd": "*"
     },
     "autoload": {
         "psr-4": {
-            "Lomkit\\Laravel\\": "src/",
-            "Lomkit\\Laravel\\Database\\Factories\\": "database/factories/"
+            "Lomkit\\Laravel\\": "src/"
         }
     },
     "extra": {

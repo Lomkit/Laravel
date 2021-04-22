@@ -1,36 +1,100 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-telescope.svg"></p>
+# Laravel Lomkit
 
-<p align="center">
-<a href="https://github.com/laravel/telescope/actions"><img src="https://github.com/laravel/telescope/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/telescope"><img src="https://img.shields.io/packagist/dt/laravel/telescope" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/telescope"><img src="https://img.shields.io/packagist/v/laravel/telescope" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/telescope"><img src="https://img.shields.io/packagist/l/laravel/telescope" alt="License"></a>
-</p>
+> Laravel tools for Lomkit.
 
-## Introduction
+## Setup
+- Setup composer.json :
 
-Laravel Telescope is an elegant debug assistant for the Laravel framework. Telescope provides insight into the requests coming into your application, exceptions, log entries, database queries, queued jobs, mail, notifications, cache operations, scheduled tasks, variable dumps and more. Telescope makes a wonderful companion to your local Laravel development environment.
+```php
+{
+    // ...
+    "require": {
+        "lomkit/laravel": "*"
+    },
+    // ...
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/Lomkit/Laravel.git" }
+    ],
+}
+```
 
-<p align="center">
-<img src="https://laravel.com/assets/img/examples/Screen_Shot_2018-10-09_at_1.47.23_PM.png">
-</p>
+And then run `composer update`
 
-## Official Documentation
+## Traits
 
-Documentation for Telescope can be found on the [Laravel website](https://laravel.com/docs/telescope).
+#### HasResourcePolicy
 
-## Contributing
+Cette classe permet de créer une Policy avec toutes les autorisations de base suivant les conventions Lomkit
 
-Thank you for considering contributing to Telescope! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### HasAttachPolicy (Laravel Nova)
 
-## Code of Conduct
+Cette classe permet de faire en sorte que les ressources externes d'une ressource Laravel Nova ne soit modifiable que si le parent l'est
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Automatic Translations
 
-## Security Vulnerabilities
+Requires https://github.com/optimistdigital/nova-translatable and https://github.com/spatie/laravel-translatable
 
-Please review [our security policy](https://github.com/laravel/telescope/security/policy) on how to report security vulnerabilities.
+Add `HasAutomaticTranslations` to the model that need translations
 
-## License
+The locales are chosen using `config('nova-translatable.locales')` 
 
-Laravel Telescope is open-sourced software licensed under the [MIT license](LICENSE.md).
+The fields chosen are those in the `$translatable` in the model
+```php
+public $translatable = ['name'];
+```
+
+##### Optional
+
+If you need approval before translating:
+
+```php
+public $waitingTranslation = 'waiting_translation';
+```
+
+If you need approval after translating:
+
+```php
+public $waitingApproval = 'waiting_approval';
+```
+
+### Commands
+**@TODO: Expliquer ici commande + job**
+**@TODO: Expliquer configuration google translate**
+
+### Query Builder Methods
+    Please note that if you don't define the required variables,
+    the waiting methods will return the same as the other methods
+
+Waiting for translation
+```php
+use App\Models\Flight;
+
+$flights = Flight::waitingTranslation()
+                ->get();
+```
+
+Translating
+```php
+use App\Models\Flight;
+
+$flights = Flight::translating()
+                ->get();
+```
+
+Waiting for approval
+```php
+use App\Models\Flight;
+
+$flights = Flight::waitingApproval()
+                ->get();
+```
+
+Translated
+```php
+use App\Models\Flight;
+
+$flights = Flight::translated()
+                ->get();
+```
+
+### Laravel Nova Helpers
