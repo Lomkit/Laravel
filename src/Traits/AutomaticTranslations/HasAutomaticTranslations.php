@@ -2,15 +2,6 @@
 namespace Lomkit\Laravel\Traits\AutomaticTranslations;
 
 trait HasAutomaticTranslations {
-
-    /**
-     * All statuses
-     **/
-    public $WAITING_TRANSLATION = 'waiting_translation';
-    public $TRANSLATING = 'translating';
-    public $WAITING_APPROVAL = 'waiting_approval';
-    public $TRANSLATED = 'translated';
-
     /**
      * Column names
      */
@@ -56,5 +47,37 @@ trait HasAutomaticTranslations {
     public function getTranslatableFields()
     {
         return $this->translatable ?? [];
+    }
+
+    public function getHasAllFieldTranslatedAttribute() {
+        foreach ($this->translatable as $translatable) {
+            foreach (array_keys(config('lomkit.locales')) as $locale) {
+                if ($this->getTranslation($translatable, $locale, false) === '') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Get the translationStatus.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getTranslationStatusAttribute($value)
+    {
+        if (!$this->has_all_field_translated) {
+            if ($this->waitingTranslation !== false && $this->{$this->waitingTranslation} === true) {
+                return config('lomkit.statuses.waiting_translation');
+            }
+            return config('lomkit.statuses.translating');
+        }
+
+        if ($this->waitingApproval !== false && $this->{$this->waitingApproval} === true) {
+            return config('lomkit.statuses.waiting_approval');
+        }
+        return config('lomkit.statuses.translated');
     }
 }

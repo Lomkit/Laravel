@@ -2,6 +2,7 @@
 
 namespace Lomkit\Laravel\Jobs;
 
+use Google\Cloud\Translate\V2\TranslateClient;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -86,6 +87,21 @@ class TranslateModel implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        // @TODO TRADUCTION DE LA LANGUE
+        $translate = new TranslateClient([
+            'keyFilePath' => config('lomkit.google_translate_key_path')
+        ]);
+
+        $result = $translate->translate($this->model->getTranslation($this->column, 'en', false), [
+            'source' => 'en',
+            'target' => $this->lang
+        ]);
+
+        $this->model->setTranslation($this->column, $this->lang, html_entity_decode($result['text'], ENT_QUOTES));
+
+        if ($this->model->has_all_field_translated && $this->model->waitingApproval !== false) {
+            $this->model->{$this->model->waitingApproval} = true;
+        }
+
+        $this->model->save();
     }
 }

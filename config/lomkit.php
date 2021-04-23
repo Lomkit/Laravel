@@ -12,51 +12,34 @@ return [
     |
     */
 
-    'google_translate_key' => env('GOOGLE_TRANSLATE_KEY', null),
+    'google_translate_key_path' => storage_path('app/google-key.json'),
 
     /*
     |--------------------------------------------------------------------------
-    | Telescope Path
+    | Lomkit locales
     |--------------------------------------------------------------------------
     |
-    | This is the URI path where Telescope will be accessible from. Feel free
-    | to change this path to anything you like. Note that the URI will not
-    | affect the paths of its internal API that aren't exposed to users.
+    | This option is used to define the locales, it uses by default
+    | the nova package to set locales but you can use your own.
     |
     */
 
-    'path' => env('TELESCOPE_PATH', 'telescope'),
+    'locales' => config('nova-translatable.locales', []),
 
     /*
     |--------------------------------------------------------------------------
-    | Telescope Storage Driver
+    | Lomkit statuses
     |--------------------------------------------------------------------------
     |
-    | This configuration options determines the storage driver that will
-    | be used to store Telescope's data. In addition, you may set any
-    | custom options as needed by the particular driver you choose.
+    | This option is used to define the statuses for automatic translations,
+    | you can override this to set your own text.
     |
     */
 
-    'driver' => env('TELESCOPE_DRIVER', 'database'),
-
-    'storage' => [
-        'database' => [
-            'connection' => env('DB_CONNECTION', 'mysql'),
-            'chunk' => 1000,
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Telescope Master Switch
-    |--------------------------------------------------------------------------
-    |
-    | This option may be used to disable all Telescope watchers regardless
-    | of their individual configuration, which simply provides a single
-    | and convenient way to enable or disable Telescope data storage.
-    |
-    */
-
-    'enabled' => env('TELESCOPE_ENABLED', true),
+    'statuses' => [
+        'waiting_translation' => 'waiting_translation',
+        'translating' => 'translating',
+        'waiting_approval' => 'waiting_approval',
+        'translated' => 'translated',
+    ]
 ];

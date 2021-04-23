@@ -90,7 +90,7 @@ class HasAutomaticTranslationsScope implements Scope {
      */
     protected function getLocales()
     {
-        return array_keys(config('nova-translatable.locales'));
+        return array_keys(config('lomkit.locales'));
     }
 
     /**

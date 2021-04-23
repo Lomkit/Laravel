@@ -36,7 +36,7 @@ Requires https://github.com/optimistdigital/nova-translatable and https://github
 
 Add `HasAutomaticTranslations` to the model that need translations
 
-The locales are chosen using `config('nova-translatable.locales')` 
+The locales are chosen using `config('lomkit.locales')` 
 
 The fields chosen are those in the `$translatable` in the model
 ```php
@@ -60,6 +60,7 @@ public $waitingApproval = 'waiting_approval';
 ### Commands
 **@TODO: Expliquer ici commande + job**
 **@TODO: Expliquer configuration google translate**
+**@TODO: Expliquer config lomkit**
 
 ### Query Builder Methods
     Please note that if you don't define the required variables,

@@ -55,7 +55,7 @@ class TranslateCommand extends Command
             return;
         }
 
-        foreach (array_keys(config('nova-translatable.locales')) as $lang) {
+        foreach (array_keys(config('lomkit.locales')) as $lang) {
             foreach ($model->translatable as $column) {
                 TranslateModel::dispatchIf($model->getTranslation($column, $lang, false) === '', $model, $lang, $column);
             }
