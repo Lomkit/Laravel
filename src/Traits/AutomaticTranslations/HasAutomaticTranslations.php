@@ -2,12 +2,22 @@
 namespace Lomkit\Laravel\Traits\AutomaticTranslations;
 
 trait HasAutomaticTranslations {
-    /**
-     * Column names
-     */
 
-    public $waitingTranslation = false;
-    public $waitingApproval = false;
+    public function __construct(array $attributes = []) {
+        parent::__construct($attributes);
+
+        if ($this->getWaitingTranslationColumn()) {
+            $this->mergeCasts([
+                $this->getWaitingTranslationColumn() => 'boolean'
+            ]);
+        }
+
+        if ($this->getWaitingApprovalColumn()) {
+            $this->mergeCasts([
+                $this->getWaitingApprovalColumn() => 'boolean'
+            ]);
+        }
+    }
 
     /**
      * Boot the soft deleting trait for a model.
@@ -26,7 +36,7 @@ trait HasAutomaticTranslations {
      */
     public function getWaitingTranslationColumn()
     {
-        return $this->waitingTranslation;
+        return $this->waitingTranslation ?? false;
     }
 
     /**
@@ -36,7 +46,7 @@ trait HasAutomaticTranslations {
      */
     public function getWaitingApprovalColumn()
     {
-        return $this->waitingApproval;
+        return $this->waitingApproval ?? false;
     }
 
     /**
@@ -69,15 +79,83 @@ trait HasAutomaticTranslations {
     public function getTranslationStatusAttribute($value)
     {
         if (!$this->has_all_field_translated) {
-            if ($this->waitingTranslation !== false && $this->{$this->waitingTranslation} === true) {
+            if ($this->getWaitingTranslationColumn() !== false && $this->{$this->getWaitingTranslationColumn()} === true) {
                 return config('lomkit.statuses.waiting_translation');
             }
             return config('lomkit.statuses.translating');
         }
 
-        if ($this->waitingApproval !== false && $this->{$this->waitingApproval} === true) {
+        if ($this->getWaitingApprovalColumn() !== false && $this->{$this->getWaitingApprovalColumn()} === true) {
             return config('lomkit.statuses.waiting_approval');
         }
         return config('lomkit.statuses.translated');
+    }
+
+    /**
+     * Launch translation model instance.
+     *
+     * @return bool|null
+     */
+    public function launchTranslation() {
+        $this->fireModelEvent('launch-translation');
+
+        $this->{$this->getWaitingTranslationColumn()} = false;
+
+        $result = $this->save();
+
+        $this->fireModelEvent('launched-translation', false);
+
+        return $result;
+    }
+
+    /**
+     * Launch translation model instance.
+     *
+     * @return bool|null
+     */
+    public function waitTranslation() {
+        $this->fireModelEvent('wait-translation');
+
+        $this->{$this->getWaitingTranslationColumn()} = true;
+
+        $result = $this->save();
+
+        $this->fireModelEvent('waited-translation', false);
+
+        return $result;
+    }
+
+    /**
+     * Launch translation model instance.
+     *
+     * @return bool|null
+     */
+    public function approveTranslation() {
+        $this->fireModelEvent('approve-translation');
+
+        $this->{$this->getWaitingApprovalColumn()} = false;
+
+        $result = $this->save();
+
+        $this->fireModelEvent('approved-translation', false);
+
+        return $result;
+    }
+
+    /**
+     * Launch translation model instance.
+     *
+     * @return bool|null
+     */
+    public function waitApproveTranslation() {
+        $this->fireModelEvent('wait-approve-translation');
+
+        $this->{$this->getWaitingApprovalColumn()} = true;
+
+        $result = $this->save();
+
+        $this->fireModelEvent('waited-approved-translation', false);
+
+        return $result;
     }
 }

@@ -46,7 +46,7 @@ class TranslateCommand extends Command
                     return $finalModel::translating()->count() > 0;
                 });
             if (!is_null($model)) {
-                $model = $model::translating()->first();
+                $model = $model::translating()->inRandomOrder()->first();
             }
         }
 
@@ -61,7 +61,7 @@ class TranslateCommand extends Command
             }
         }
 
-        $this->info('Model treated, translation(s) waiting');
+        $this->info("Model treated: ".get_class($model)." {$model->id}");
     }
 
     protected function getModels() {

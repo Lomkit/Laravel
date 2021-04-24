@@ -15,7 +15,7 @@ class HasAutomaticTranslationsScope implements Scope {
      *
      * @var string[]
      */
-    protected $extensions = ['WaitingTranslation', 'Translating', 'WaitingApproval', 'Translated'];
+    protected $extensions = ['WaitingTranslation', 'Translating', 'WaitingApproval', 'Translated', 'LaunchTranslation', 'ApproveTranslation', 'WaitTranslation', 'WaitApproveTranslation'];
 
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -120,9 +120,11 @@ class HasAutomaticTranslationsScope implements Scope {
      */
     public function whereJsonDoesntContainKeys(Builder $builder, string $column, $keys)
     {
-        foreach ($keys as $key) {
-            $builder->whereRaw("JSON_EXTRACT({$column}, \"$.{$key}\") IS NULL", [], 'or');
-        }
+        $builder->where(function ($query) use ($keys, $column) {
+            foreach ($keys as $key) {
+                $query->orWhereRaw("JSON_EXTRACT({$column}, \"$.{$key}\") IS NULL");
+            }
+        });
 
         return $builder;
     }
@@ -140,10 +142,11 @@ class HasAutomaticTranslationsScope implements Scope {
                 $this->whereJsonDoesntContainKeys($builder, $translatable, $this->getLocales());
             }
 
-            if ($this->getWaitingTranslationColumn($builder) !== false)
+            if ($this->getWaitingTranslationColumn($builder) !== false) {
                 $builder->where($this->getWaitingTranslationColumn($builder), true);
+            }
 
-            return $builder->withoutGlobalScope($this);
+            return $builder;
         });
     }
 
@@ -160,10 +163,11 @@ class HasAutomaticTranslationsScope implements Scope {
                 $this->whereJsonDoesntContainKeys($builder, $translatable, $this->getLocales());
             }
 
-            if ($this->getWaitingTranslationColumn($builder) !== false)
+            if ($this->getWaitingTranslationColumn($builder) !== false) {
                 $builder->where($this->getWaitingTranslationColumn($builder), false);
+            }
 
-            return $builder->withoutGlobalScope($this);
+            return $builder;
         });
     }
 
@@ -180,10 +184,11 @@ class HasAutomaticTranslationsScope implements Scope {
                 $this->whereJsonContainsKeys($builder, $translatable, $this->getLocales());
             }
 
-            if ($this->getWaitingApprovalColumn($builder) !== false)
+            if ($this->getWaitingApprovalColumn($builder) !== false) {
                 $builder->where($this->getWaitingApprovalColumn($builder), true);
+            }
 
-            return $builder->withoutGlobalScope($this);
+            return $builder;
         });
     }
 
@@ -200,10 +205,64 @@ class HasAutomaticTranslationsScope implements Scope {
                 $this->whereJsonContainsKeys($builder, $translatable, $this->getLocales());
             }
 
-            if ($this->getWaitingApprovalColumn($builder) !== false)
+            if ($this->getWaitingApprovalColumn($builder) !== false) {
                 $builder->where($this->getWaitingApprovalColumn($builder), false);
+            }
 
-            return $builder->withoutGlobalScope($this);
+            return $builder;
         });
     }
+
+    /**
+     * Add the restore extension to the builder.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @return void
+     */
+    protected function addLaunchTranslation(Builder $builder)
+    {
+        $builder->macro('launchTranslation', function (Builder $builder) {
+            return $builder->update([$builder->getModel()->getWaitingTranslationColumn() => false]);
+        });
+    }
+
+    /**
+     * Add the restore extension to the builder.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @return void
+     */
+    protected function addWaitTranslation(Builder $builder)
+    {
+        $builder->macro('waitTranslation', function (Builder $builder) {
+            return $builder->update([$builder->getModel()->getWaitingTranslationColumn() => true]);
+        });
+    }
+
+    /**
+     * Add the restore extension to the builder.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @return void
+     */
+    protected function addApproveTranslation(Builder $builder)
+    {
+        $builder->macro('approveTranslation', function (Builder $builder) {
+            return $builder->update([$builder->getModel()->getWaitingApprovalColumn() => false]);
+        });
+    }
+
+    /**
+     * Add the restore extension to the builder.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @return void
+     */
+    protected function addWaitApproveTranslation(Builder $builder)
+    {
+        $builder->macro('waitApproveTranslation', function (Builder $builder) {
+            return $builder->update([$builder->getModel()->getWaitingApprovalColumn() => true]);
+        });
+    }
+
 }

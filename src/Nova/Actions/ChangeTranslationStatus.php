@@ -13,9 +13,15 @@ use Laravel\Nova\Actions\DestructiveAction;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\Select;
 
-class ForgetTranslation extends DestructiveAction implements ShouldQueue
+class ChangeTranslationStatus extends Action implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $allows;
+
+    public function __construct($arguments) {
+        $this->allows = $arguments;
+    }
 
     /**
      * Perform the action on the given models.
@@ -26,17 +32,15 @@ class ForgetTranslation extends DestructiveAction implements ShouldQueue
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        if(!in_array($fields->locale, array_keys(Arr::except(config('lomkit.locales'), 'en')))) {
+        if (!in_array($fields->action, ['launchTranslation', 'waitTranslation', 'approveTranslation', 'waitApproveTranslation'])) {
             foreach ($models as $model) {
-                $this->markAsFailed($model, 'The user modified the field');
+                return $this->markAsFailed($model, 'The user modified the field');
             }
             return Action::danger('Error');
         }
 
         foreach ($models as $model) {
-            foreach ($model->translatable as $translatable) {
-                $model->forgetTranslation($translatable, $fields->locale);
-            }
+            $model->{$fields->action}();
             $model->save();
 
             $this->markAsFinished($model);
@@ -51,8 +55,19 @@ class ForgetTranslation extends DestructiveAction implements ShouldQueue
     public function fields()
     {
         return [
-            Select::make('Locale')
-                ->options(Arr::except(config('lomkit.locales'), 'en'))
+            Select::make('Action')
+                ->options(function () {
+                    return array_merge(
+                        Arr::where($this->allows, function ($value) { return $value === 'wait'; }) ? [
+                            'launchTranslation' => 'Launch Translation',
+                            'waitTranslation' => 'Wait Translation',
+                        ] : [],
+                        Arr::where($this->allows, function ($value) { return $value === 'approve'; }) ? [
+                            'approveTranslation' => 'Approve Translation',
+                            'waitApproveTranslation' => 'Wait Approve Translation',
+                        ] : []
+                    );
+                })
                 ->rules('required')
         ];
     }

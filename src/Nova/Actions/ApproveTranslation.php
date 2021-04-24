@@ -13,7 +13,7 @@ use Laravel\Nova\Actions\DestructiveAction;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\Select;
 
-class ForgetTranslation extends DestructiveAction implements ShouldQueue
+class ApproveTranslation extends Action implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
@@ -26,17 +26,9 @@ class ForgetTranslation extends DestructiveAction implements ShouldQueue
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        if(!in_array($fields->locale, array_keys(Arr::except(config('lomkit.locales'), 'en')))) {
-            foreach ($models as $model) {
-                $this->markAsFailed($model, 'The user modified the field');
-            }
-            return Action::danger('Error');
-        }
-
         foreach ($models as $model) {
-            foreach ($model->translatable as $translatable) {
-                $model->forgetTranslation($translatable, $fields->locale);
-            }
+            $model->approveTranslation();
+            $model->launchTranslation();
             $model->save();
 
             $this->markAsFinished($model);
@@ -50,10 +42,6 @@ class ForgetTranslation extends DestructiveAction implements ShouldQueue
      */
     public function fields()
     {
-        return [
-            Select::make('Locale')
-                ->options(Arr::except(config('lomkit.locales'), 'en'))
-                ->rules('required')
-        ];
+        return [];
     }
 }

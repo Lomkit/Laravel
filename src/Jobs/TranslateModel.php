@@ -98,8 +98,8 @@ class TranslateModel implements ShouldQueue, ShouldBeUnique
 
         $this->model->setTranslation($this->column, $this->lang, html_entity_decode($result['text'], ENT_QUOTES));
 
-        if ($this->model->has_all_field_translated && $this->model->waitingApproval !== false) {
-            $this->model->{$this->model->waitingApproval} = true;
+        if ($this->model->has_all_field_translated && $this->model->getWaitingApprovalColumn() !== false) {
+            $this->model->waitApproveTranslation();
         }
 
         $this->model->save();
