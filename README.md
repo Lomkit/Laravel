@@ -33,11 +33,10 @@ More doc about google api key can be found here: https://github.com/googleapis/g
 
 #### HasResourcePolicy
 
-Cette classe permet de créer une Policy avec toutes les autorisations de base suivant les conventions Lomkit
-
+This class allows you to create a Policy with all the basic permissions according to the Lomkit conventions
 #### HasAttachPolicy (Laravel Nova)
 
-Cette classe permet de faire en sorte que les ressources externes d'une ressource Laravel Nova ne soit modifiable que si le parent l'est
+This class makes it possible to ensure that the external resources of a Laravel Nova resource can only be modified if the parent is.
 
 ## Automatic Translations
 
