@@ -27,7 +27,8 @@ You can publish the config using:
 php artisan vendor:publish --tag=lomkit-config
 ```
 
-More doc about google api key can be found here: https://github.com/googleapis/google-cloud-php/blob/master/AUTHENTICATION.md
+More doc about google api key can be found here: https://github.com/googleapis/google-cloud-php/blob/master/AUTHENTICATION.md  
+By default the key is trying to be found at `storage_path('app/google-key.json')`
 
 ## Traits
 
