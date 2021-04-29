@@ -18,18 +18,6 @@ class HasAutomaticTranslationsScope implements Scope {
     protected $extensions = ['WaitingTranslation', 'Translating', 'WaitingApproval', 'Translated', 'LaunchTranslation', 'ApproveTranslation', 'WaitTranslation', 'WaitApproveTranslation'];
 
     /**
-     * Apply the scope to a given Eloquent query builder.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return void
-     */
-    public function apply(Builder $builder, Model $model)
-    {
-        $builder->whereNull($model->getQualifiedDeletedAtColumn());
-    }
-
-    /**
      * Extend the query builder with the needed functions.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
