@@ -16,7 +16,7 @@ trait HasTranslationsWithToArray
     {
         $attributes = parent::toArray();
         foreach ($this->getTranslatableAttributes() as $field) {
-            $attributes[$field] = $this->getTranslation($field);
+            $attributes[$field] = $this->$field;
         }
         return $attributes;
     }
