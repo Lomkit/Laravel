@@ -32,6 +32,11 @@ By default the key is trying to be found at `storage_path('app/google-key.json')
 
 ## Traits
 
+#### HasTranslationsWithToArray
+
+This class extends the `HasTranslations` from Spatie Translatable and add an ToArray method that allow the model to be rendered on api with user's locale directly
+
+You can manually set the locale using `setLocale` from Spatie Translatable
 #### HasResourcePolicy
 
 This class allows you to create a Policy with all the basic permissions according to the Lomkit conventions
