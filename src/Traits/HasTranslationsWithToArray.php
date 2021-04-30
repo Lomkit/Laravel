@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Traits;
+namespace Lomkit\Laravel\Traits;
+
 use Spatie\Translatable\HasTranslations;
+
 trait HasTranslationsWithToArray
 {
     use HasTranslations;
