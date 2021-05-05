@@ -47,7 +47,7 @@ class CreatesPerModel extends Partition {
         $results = [];
 
         foreach ($this->getModels() as $model) {
-            $count = $model::whereBetween($model::CREATED_AT, $this->getFrom(), $this->getTo())
+            $count = $model::whereBetween($model::CREATED_AT, [$this->getFrom(), $this->getTo()])
                 ->count();
             if ($count > 0) {
                 $results[get_class(new $model)] = $count;
