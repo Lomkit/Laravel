@@ -33,7 +33,7 @@ class CreatesPerModel extends Partition {
     }
 
     public function getTo() {
-        return $this->from ?? Carbon::now();
+        return $this->to ?? Carbon::now();
     }
 
     /**
