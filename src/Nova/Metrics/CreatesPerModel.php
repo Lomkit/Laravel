@@ -50,7 +50,7 @@ class CreatesPerModel extends Partition {
             $count = $model::whereBetween($model::CREATED_AT, [$this->getFrom(), $this->getTo()])
                 ->count();
             if ($count > 0) {
-                $results[get_class(new $model)] = $count;
+                $results[(new $model)->getTable()] = $count;
             }
         }
 
