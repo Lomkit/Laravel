@@ -17,6 +17,14 @@ class CreatesPerModel extends Partition {
     protected $to;
     protected $from;
 
+    public $name = 'CreatesPerModelPerMonth';
+
+    public function setName($name) {
+        $this->name = $name;
+
+        return $this;
+    }
+
     public function from($from) {
         $this->from = $from;
 
