@@ -40,11 +40,11 @@ class CreatesPerModel extends Partition {
     }
 
     public function getFrom() {
-        return $this->from ?? Carbon::now()->subMonth();
+        return (clone $this->from) ?? Carbon::now()->subMonth();
     }
 
     public function getTo() {
-        return $this->to ?? Carbon::now();
+        return (clone $this->to) ?? Carbon::now();
     }
 
     /**
