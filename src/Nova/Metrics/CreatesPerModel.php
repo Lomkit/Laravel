@@ -88,11 +88,14 @@ class CreatesPerModel extends Partition {
 
                 if (class_exists($class)) {
                     $reflection = new \ReflectionClass($class);
-                    $instanciated = new $class;
+
                     $valid = $reflection->isSubclassOf(Model::class) &&
-                        !$reflection->isAbstract() &&
-                        $instanciated->timestamps !== false
-                    ;
+                        !$reflection->isAbstract();
+
+                    if ($valid === true) {
+                        $instanciated = new $class;
+                        $valid = $instanciated->timestamps !== false;
+                    }
                 }
 
                 return $valid;
