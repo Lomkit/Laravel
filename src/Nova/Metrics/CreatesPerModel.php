@@ -23,6 +23,8 @@ class CreatesPerModel extends Partition {
         } else {
             $this->help("Data from {$this->getFrom()->format('Y-m-d')} to {$this->getTo()->format('Y-m-d')}");
         }
+
+        return $this;
     }
 
     public function from($from) {
