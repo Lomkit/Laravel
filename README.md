@@ -204,6 +204,21 @@ use Lomkit\Laravel\Nova\Fields\TranslationStatusField;
 
 TranslationStatusField::make()
 ```
+##### Created At
+This field works the same as a badge with preconfigured labels
+```php
+use Lomkit\Laravel\Nova\Fields\CreatedAtField;
+
+CreatedAtField::make()
+```
+##### Updated At
+This field works the same as a badge with preconfigured labels
+```php
+use Lomkit\Laravel\Nova\Fields\UpdatedAtField;
+
+UpdatedAtField::make()
+```
+
 
 #### Metrics
 ##### New Resources
@@ -218,7 +233,15 @@ use Lomkit\Laravel\Nova\Metrics\ResourcesPerMonth;
 
 ResourcesPerMonth::make()->setModel(Model::class),
 ```
+##### Creates Per Model
+By default, this model is taking the last month.
+```php
+use Lomkit\Laravel\Nova\Metrics\CreatesPerModel;
 
+(new CreatesPerModel)
+    ->from(Carbon::now()->subMonth()->subYear())
+    ->to(Carbon::now()),
+```
 #### Lenses
 
 By default all lenses inherit from parent, you can change this by extending
