@@ -234,13 +234,15 @@ use Lomkit\Laravel\Nova\Metrics\ResourcesPerMonth;
 ResourcesPerMonth::make()->setModel(Model::class),
 ```
 ##### Creates Per Model
-By default, this model is taking the last month.
+By default, this model is taking the last month.  
+`->AutomaticHelpText()` sets an automatic help text for the duration, it needs to be called last. 
 ```php
 use Lomkit\Laravel\Nova\Metrics\CreatesPerModel;
 
 (new CreatesPerModel)
     ->from(Carbon::now()->subMonth()->subYear())
-    ->to(Carbon::now()),
+    ->to(Carbon::now())
+    ->automaticHelpText(),
 ```
 #### Lenses
 
