@@ -18,10 +18,14 @@ class CreatesPerModel extends Partition {
 
     public function from($from) {
         $this->from = $from;
+
+        return $this;
     }
 
     public function to($to) {
         $this->to = $to;
+
+        return $this;
     }
 
     public function getFrom() {
