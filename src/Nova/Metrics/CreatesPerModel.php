@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Partition;
+use Laravel\Nova\Nova;
 
 class CreatesPerModel extends Partition {
 
@@ -50,7 +51,7 @@ class CreatesPerModel extends Partition {
             $count = $model::whereBetween($model::CREATED_AT, [$this->getFrom(), $this->getTo()])
                 ->count();
             if ($count > 0) {
-                $results[(new $model)->getTable()] = $count;
+                $results[Nova::humanize((new $model)->getTable())] = $count;
             }
         }
 
