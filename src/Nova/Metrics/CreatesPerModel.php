@@ -17,6 +17,17 @@ class CreatesPerModel extends Partition {
     protected $to;
     protected $from;
 
+    public function __construct($component = null)
+    {
+        parent::__construct($component);
+
+        if ($this->getTo()->isToday()) {
+            $this->from("Data from {$this->getFrom()->diffForHumans()}");
+        } else {
+            $this->help("Data from {$this->getFrom()->format('Y-m-d')} to {$this->getTo()->format('Y-m-d')}");
+        }
+    }
+
     public function from($from) {
         $this->from = $from;
 
