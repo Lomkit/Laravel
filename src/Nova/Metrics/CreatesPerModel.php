@@ -17,16 +17,6 @@ class CreatesPerModel extends Partition {
     protected $to;
     protected $from;
 
-    public function automaticHelpText() {
-        if ($this->getTo()->isToday()) {
-            $this->from("Data from {$this->getFrom()->diffForHumans()}");
-        } else {
-            $this->help("Data from {$this->getFrom()->format('Y-m-d')} to {$this->getTo()->format('Y-m-d')}");
-        }
-
-        return $this;
-    }
-
     public function from($from) {
         $this->from = $from;
 
@@ -40,11 +30,11 @@ class CreatesPerModel extends Partition {
     }
 
     public function getFrom() {
-        return isset($this->from) ? (clone $this->from) : Carbon::now()->subMonth();
+        return $this->from ?? Carbon::now()->subMonth();
     }
 
     public function getTo() {
-        return isset($this->to) ? (clone $this->from) : Carbon::now();
+        return $this->to ?? Carbon::now();
     }
 
     /**
