@@ -4,7 +4,6 @@
 namespace Lomkit\Laravel\Nova\Fields;
 
 
-use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Badge;
 
 class TranslationStatusField extends Badge {
