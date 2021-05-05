@@ -205,6 +205,20 @@ use Lomkit\Laravel\Nova\Fields\TranslationStatusField;
 TranslationStatusField::make()
 ```
 
+#### Metrics
+##### New Resources
+```php
+use Lomkit\Laravel\Nova\Metrics\NewResources;
+
+NewResources::make()->setModel(Model::class),
+```
+##### Resources Per Month
+```php
+use Lomkit\Laravel\Nova\Metrics\ResourcesPerMonth;
+
+ResourcesPerMonth::make()->setModel(Model::class),
+```
+
 #### Lenses
 
 By default all lenses inherit from parent, you can change this by extending
