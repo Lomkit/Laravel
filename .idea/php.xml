@@ -60,7 +60,6 @@
       <path value="$PROJECT_DIR$/vendor/doctrine/cache" />
       <path value="$PROJECT_DIR$/vendor/symfony/intl" />
       <path value="$PROJECT_DIR$/vendor/laravel/nova" />
-      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-icu" />
       <path value="$PROJECT_DIR$/vendor/brick/money" />
       <path value="$PROJECT_DIR$/vendor/spatie/once" />
       <path value="$PROJECT_DIR$/vendor/paragonie/constant_time_encoding" />
