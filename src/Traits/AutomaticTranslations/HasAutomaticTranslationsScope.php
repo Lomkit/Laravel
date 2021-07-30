@@ -40,14 +40,6 @@ class HasAutomaticTranslationsScope implements Scope {
         foreach ($this->extensions as $extension) {
             $this->{"add{$extension}"}($builder);
         }
-
-        $builder->onDelete(function (Builder $builder) {
-            $column = $this->getDeletedAtColumn($builder);
-
-            return $builder->update([
-                $column => $builder->getModel()->freshTimestampString(),
-            ]);
-        });
     }
 
     /**
